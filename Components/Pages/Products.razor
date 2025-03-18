@@ -1,0 +1,41 @@
+﻿@page "/products"
+@attribute [StreamRendering(true)]
+
+<h3>Produkter</h3>
+
+@if (isLoading) 
+{
+    <p>Hämtar produkter...</p>
+}
+else if (errorMessage != null)
+{
+    <p class="text-danger">@errorMessage</p>
+}
+else if (products.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Namn</th>
+                <th>Pris</th>
+                <th>Utgått ur sortimentet</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+                <tr>
+                    <td>@product.ProductNumber</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>@product.IsDiscontinued</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Inga produkter hittades.</p>
+}
