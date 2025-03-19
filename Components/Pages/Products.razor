@@ -51,6 +51,8 @@ else
 @if (isEditDialogVisible)
 {
     <ProductEditDialog Product="productToEdit"
+                       IsVisible="isEditDialogVisible"
                        OnSave="HandleEditSave"
                        OnCancel="HandleEditCancel" />
 }
+
