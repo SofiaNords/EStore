@@ -1,0 +1,21 @@
+﻿<h3>Redigera produkt</h3>
+<div>
+    <label>Produktnummer</label>
+    <input type="text" @bind="editedProduct.ProductNumber" class="form-control" />
+</div>
+<div>
+    <label>Namn</label>
+    <input type="text" @bind="editedProduct.Name" class="form-control" />
+</div>
+<div>
+    <label>Pris</label>
+    <input type="number" @bind="editedProduct.Price" class="form-control" />
+</div>
+<div>
+    <label>Utgått ur sortimentet</label>
+    <input type="checkbox" @bind="editedProduct.IsDiscontinued" class="form-check-input" />
+</div>
+<div>
+    <button class="btn btn-primary" @onclick="HandleSave">Spara</button>
+    <button class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+</div>
