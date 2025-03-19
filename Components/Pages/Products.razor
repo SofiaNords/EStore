@@ -17,11 +17,12 @@ else if (products.Any())
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Produktnummer</th>
                 <th>Namn</th>
+                <th>Beskrivning</th>
                 <th>Pris</th>
+                <th>Produktkategori</th>
                 <th>Åtgärder</th>
-                <th>Utgått ur sortimentet</th>
             </tr>
         </thead>
         <tbody>
@@ -30,12 +31,15 @@ else if (products.Any())
                 <tr>
                     <td>@product.ProductNumber</td>
                     <td>@product.Name</td>
+                    <td>
+                        <button class="btn btn-info" @onclick="() => ShowDescription(product.Description)">Läs mer</button>
+                    </td>
                     <td>@product.Price.ToString("C")</td>
+                    <td>@product.Category</td>
                     <td>
                         <button class="btn btn-warning" @onclick="() => PrepareEdit(product)">Redigera</button>
                         <button class="btn btn-danger" @onclick="() => PrepareDelete(product.Id)">Ta bort</button>
                     </td>
-                    <td>@product.IsDiscontinued</td>
                 </tr>
             }
         </tbody>
@@ -51,8 +55,15 @@ else
 @if (isEditDialogVisible)
 {
     <ProductEditDialog Product="productToEdit"
-                       IsVisible="isEditDialogVisible"
-                       OnSave="HandleEditSave"
-                       OnCancel="HandleEditCancel" />
+    IsVisible="isEditDialogVisible"
+    OnSave="HandleEditSave"
+    OnCancel="HandleEditCancel" />
 }
 
+
+@if (isDescriptionModalVisible)
+{
+    <ProductDescriptionDialog Description="@currentDescription"
+                    IsVisible="isDescriptionModalVisible"
+                    OnClose="CloseDescriptionModal"/>
+}

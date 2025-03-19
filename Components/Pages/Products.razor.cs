@@ -6,13 +6,16 @@ namespace EStore.Components.Pages
 {
     public partial class Products
     {
-        private List<ProductDto> products = new List<ProductDto>();
         private bool isLoading = true;
-        private string errorMessage;
-        private bool isConfirmDialogVisible = false;
         private bool isEditDialogVisible = false;
-        private string productIdToDelete;
+        private bool isConfirmDialogVisible = false;
+        private bool isDescriptionModalVisible = false;
+
+        private string currentDescription;
         private ProductDto productToEdit;
+        private string productIdToDelete;
+        private List<ProductDto> products = new List<ProductDto>();
+        private string errorMessage;
 
         [Inject]
         public HttpClient Http { get; set; }
@@ -31,6 +34,17 @@ namespace EStore.Components.Pages
             {
                 isLoading = false; 
             }
+        }
+
+        private void ShowDescription(string description)
+        {
+            currentDescription = description;
+            isDescriptionModalVisible = true;
+        }
+
+        private void CloseDescriptionModal()
+        {
+            isDescriptionModalVisible = false;
         }
 
         private void PrepareDelete(string productId)
