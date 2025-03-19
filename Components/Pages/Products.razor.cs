@@ -10,9 +10,11 @@ namespace EStore.Components.Pages
         private bool isEditDialogVisible = false;
         private bool isConfirmDialogVisible = false;
         private bool isDescriptionModalVisible = false;
+        private bool isCreationModalVisible = false;
 
         private string currentDescription;
         private ProductDto productToEdit;
+        private ProductForCreationDto productForCreation = new ProductForCreationDto();
         private string productIdToDelete;
         private List<ProductDto> products = new List<ProductDto>();
         private string errorMessage;
@@ -45,6 +47,39 @@ namespace EStore.Components.Pages
         private void CloseDescriptionModal()
         {
             isDescriptionModalVisible = false;
+        }
+
+        private void PrepareCreate()
+        {
+            productForCreation = new ProductForCreationDto();
+            isCreationModalVisible = true;
+        }
+
+        private async Task HandleCreateSave(ProductForCreationDto newProduct)
+        {
+            try
+            {
+                var response = await Http.PostAsJsonAsync("api/products", newProduct);
+                if (response.IsSuccessStatusCode)
+                {
+                    var createdProduct = await response.Content.ReadFromJsonAsync<ProductDto>();
+                    products.Add(createdProduct); // Add the new product to the list
+                    isCreationModalVisible = false; // Hide the modal
+                }
+                else
+                {
+                    errorMessage = "Något gick fel vid skapandet av produkten.";
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Något gick fel: {ex.Message}";
+            }
+        }
+
+        private void HandleCreateCancel()
+        {
+            isCreationModalVisible = false;
         }
 
         private void PrepareDelete(string productId)
@@ -96,7 +131,9 @@ namespace EStore.Components.Pages
                     {
                         products[index].ProductNumber = updatedProduct.ProductNumber;
                         products[index].Name = updatedProduct.Name;
+                        products[index].Description = updatedProduct.Description;
                         products[index].Price = updatedProduct.Price;
+                        products[index].Category = updatedProduct.Category;
                         products[index].IsDiscontinued = updatedProduct.IsDiscontinued;
                     }
                     isEditDialogVisible = false; 

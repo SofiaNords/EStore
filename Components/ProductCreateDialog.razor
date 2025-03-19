@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<div class="modal @GetModalClass()" tabindex="-1" role="dialog" aria-hidden="@(IsVisible ? "false" : "true")">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lägg till produkt</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="HandleCancel">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label>Produktnummer</label>
+                    <input type="text" @bind="createdProduct.ProductNumber" class="form-control" />
+                </div>
+                <div>
+                    <label>Namn</label>
+                    <input type="text" @bind="createdProduct.Name" class="form-control" />
+                </div>
+                <div>
+                    <label>Beskrivning</label>
+                    <input type="text" @bind="createdProduct.Description" class="form-control" />
+                </div>
+                <div>
+                    <label>Pris</label>
+                    <input type="number" @bind="createdProduct.Price" class="form-control" />
+                </div>
+                <div>
+                    <label>Produktkategori</label>
+                    <input type="text" @bind="createdProduct.Category" class="form-control" />
+                </div>
+                <div>
+                    <label>Utgått ur sortimentet</label>
+                    <input type="checkbox" @bind="createdProduct.IsDiscontinued" class="form-check-input" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+                <button type="button" class="btn btn-primary" @onclick="HandleSave">Spara</button>
+            </div>
+        </div>
+    </div>
+</div>

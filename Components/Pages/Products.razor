@@ -4,6 +4,8 @@
 
 <h3>Produkter</h3>
 
+<button class="btn btn-success" @onclick="() => PrepareCreate()">Lägg till produkt</button>
+
 @if (isLoading) 
 {
     <p>Hämtar produkter...</p>
@@ -64,6 +66,14 @@ else
 @if (isDescriptionModalVisible)
 {
     <ProductDescriptionDialog Description="@currentDescription"
-                    IsVisible="isDescriptionModalVisible"
-                    OnClose="CloseDescriptionModal"/>
+    IsVisible="isDescriptionModalVisible"
+    OnClose="CloseDescriptionModal"/>
+}
+
+@if (isCreationModalVisible)
+{
+    <ProductCreateDialog Product="productForCreation"
+        IsVisible="isCreationModalVisible"
+        OnSave="HandleCreateSave"
+        OnCancel="HandleEditCancel"/>
 }
