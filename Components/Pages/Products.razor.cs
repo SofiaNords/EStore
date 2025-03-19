@@ -9,6 +9,8 @@ namespace EStore.Components.Pages
         private List<ProductDto> products = new List<ProductDto>();
         private bool isLoading = true;
         private string errorMessage;
+        private bool isConfirmDialogVisible = false;
+        private string productIdToDelete;
 
         [Inject]
         public HttpClient Http { get; set; }
@@ -17,7 +19,6 @@ namespace EStore.Components.Pages
         {
             try
             {
-                // Hämtar produkter från API:et
                 products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
             }
             catch (Exception ex)
@@ -26,8 +27,39 @@ namespace EStore.Components.Pages
             }
             finally
             {
-                isLoading = false;  // När datan har hämtats, sätt isLoading till false
+                isLoading = false; 
             }
+        }
+
+        private void PrepareDelete(string productId)
+        {
+            productIdToDelete = productId;
+            isConfirmDialogVisible = true;
+        }
+
+
+        private async Task HandleDeleteConfirmation(bool isConfirmed)
+        {
+            if (isConfirmed && !string.IsNullOrEmpty(productIdToDelete))
+            {
+                try
+                {
+                    var response = await Http.DeleteAsync($"api/products/{productIdToDelete}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        products.RemoveAll(p => p.Id == productIdToDelete);
+                    }
+                    else
+                    {
+                        errorMessage = "Något gick fel vid borttagning av produkten.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = $"Något gick fel: {ex.Message}";
+                }
+            }
+            isConfirmDialogVisible = false;
         }
     }
 }
