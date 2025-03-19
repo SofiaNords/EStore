@@ -9,6 +9,8 @@ namespace EStore.Components.Pages
         private List<ProductDto> products = new List<ProductDto>();
         private bool isLoading = true;
         private string errorMessage;
+        private bool isConfirmDialogVisible = false;
+        private string productIdToDelete;
 
         [Inject]
         public HttpClient Http { get; set; }
@@ -17,7 +19,6 @@ namespace EStore.Components.Pages
         {
             try
             {
-                // Hämtar produkter från API:et
                 products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
             }
             catch (Exception ex)
@@ -26,43 +27,39 @@ namespace EStore.Components.Pages
             }
             finally
             {
-                isLoading = false;  // När datan har hämtats, sätt isLoading till false
+                isLoading = false; 
             }
         }
 
-        // Metod för att ta bort produkt
-        private async Task DeleteProduct(string productId)
+        private void PrepareDelete(string productId)
         {
-            // Bekräfta borttagning (valfritt)
-            var confirm = await Task.FromResult(ConfirmDelete());
-            if (!confirm)
-            {
-                return;
-            }
-
-            try
-            {
-                var response = await Http.DeleteAsync($"api/products/{productId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    // Ta bort produkten från listan
-                    products.RemoveAll(p => p.Id == productId);
-                }
-                else
-                {
-                    errorMessage = "Något gick fel vid borttagning av produkten.";
-                }
-            }
-            catch (Exception ex)
-            {
-                errorMessage = $"Något gick fel: {ex.Message}";
-            }
+            productIdToDelete = productId;
+            isConfirmDialogVisible = true;
         }
 
-        // Bekräftelsefunktion för att ta bort produkt
-        private bool ConfirmDelete()
+
+        private async Task HandleDeleteConfirmation(bool isConfirmed)
         {
-            return true; // För nu, returnera alltid true för att bekräfta borttagning
+            if (isConfirmed && !string.IsNullOrEmpty(productIdToDelete))
+            {
+                try
+                {
+                    var response = await Http.DeleteAsync($"api/products/{productIdToDelete}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        products.RemoveAll(p => p.Id == productIdToDelete);
+                    }
+                    else
+                    {
+                        errorMessage = "Något gick fel vid borttagning av produkten.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = $"Något gick fel: {ex.Message}";
+                }
+            }
+            isConfirmDialogVisible = false;
         }
     }
 }
