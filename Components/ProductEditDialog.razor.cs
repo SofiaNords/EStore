@@ -16,6 +16,11 @@ namespace EStore.Components
 
         private ProductForUpdateDto editedProduct;
 
+        [Parameter]
+        public bool IsVisible { get; set; }
+
+        private string GetModalClass() => IsVisible ? "show d-block" : "fade";
+
         protected override void OnParametersSet()
         {
             editedProduct = Product != null ? new ProductForUpdateDto

@@ -1,21 +1,36 @@
-﻿<h3>Redigera produkt</h3>
-<div>
-    <label>Produktnummer</label>
-    <input type="text" @bind="editedProduct.ProductNumber" class="form-control" />
-</div>
-<div>
-    <label>Namn</label>
-    <input type="text" @bind="editedProduct.Name" class="form-control" />
-</div>
-<div>
-    <label>Pris</label>
-    <input type="number" @bind="editedProduct.Price" class="form-control" />
-</div>
-<div>
-    <label>Utgått ur sortimentet</label>
-    <input type="checkbox" @bind="editedProduct.IsDiscontinued" class="form-check-input" />
-</div>
-<div>
-    <button class="btn btn-primary" @onclick="HandleSave">Spara</button>
-    <button class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<div class="modal @GetModalClass()" tabindex="-1" role="dialog" aria-hidden="@(IsVisible ? "false" : "true")">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Redigera produkt</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="HandleCancel">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label>Produktnummer</label>
+                    <input type="text" @bind="editedProduct.ProductNumber" class="form-control" />
+                </div>
+                <div>
+                    <label>Namn</label>
+                    <input type="text" @bind="editedProduct.Name" class="form-control" />
+                </div>
+                <div>
+                    <label>Pris</label>
+                    <input type="number" @bind="editedProduct.Price" class="form-control" />
+                </div>
+                <div>
+                    <label>Utgått ur sortimentet</label>
+                    <input type="checkbox" @bind="editedProduct.IsDiscontinued" class="form-check-input" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+                <button type="button" class="btn btn-primary" @onclick="HandleSave">Spara</button>
+            </div>
+        </div>
+    </div>
 </div>
