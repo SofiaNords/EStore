@@ -29,5 +29,40 @@ namespace EStore.Components.Pages
                 isLoading = false;  // När datan har hämtats, sätt isLoading till false
             }
         }
+
+        // Metod för att ta bort produkt
+        private async Task DeleteProduct(string productId)
+        {
+            // Bekräfta borttagning (valfritt)
+            var confirm = await Task.FromResult(ConfirmDelete());
+            if (!confirm)
+            {
+                return;
+            }
+
+            try
+            {
+                var response = await Http.DeleteAsync($"api/products/{productId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    // Ta bort produkten från listan
+                    products.RemoveAll(p => p.Id == productId);
+                }
+                else
+                {
+                    errorMessage = "Något gick fel vid borttagning av produkten.";
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Något gick fel: {ex.Message}";
+            }
+        }
+
+        // Bekräftelsefunktion för att ta bort produkt
+        private bool ConfirmDelete()
+        {
+            return true; // För nu, returnera alltid true för att bekräfta borttagning
+        }
     }
 }
