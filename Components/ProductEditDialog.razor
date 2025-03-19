@@ -19,8 +19,16 @@
                     <input type="text" @bind="editedProduct.Name" class="form-control" />
                 </div>
                 <div>
+                    <label>Beskrivning</label>
+                    <input type="text" @bind="editedProduct.Description" class="form-control" />
+                </div>
+                <div>
                     <label>Pris</label>
                     <input type="number" @bind="editedProduct.Price" class="form-control" />
+                </div>
+                <div>
+                    <label>Produktkategori</label>
+                    <input type="text" @bind="editedProduct.Category" class="form-control" />
                 </div>
                 <div>
                     <label>Utgått ur sortimentet</label>
