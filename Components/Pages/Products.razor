@@ -32,6 +32,7 @@ else if (products.Any())
                     <td>@product.Name</td>
                     <td>@product.Price.ToString("C")</td>
                     <td>
+                        <button class="btn btn-warning" @onclick="() => PrepareEdit(product)">Redigera</button>
                         <button class="btn btn-danger" @onclick="() => PrepareDelete(product.Id)">Ta bort</button>
                     </td>
                     <td>@product.IsDiscontinued</td>
@@ -46,3 +47,10 @@ else
 }
 
 <ConfirmDeleteDialog IsVisible="isConfirmDialogVisible" OnConfirmed="HandleDeleteConfirmation" />
+
+@if (isEditDialogVisible)
+{
+    <ProductEditDialog Product="productToEdit"
+                       OnSave="HandleEditSave"
+                       OnCancel="HandleEditCancel" />
+}

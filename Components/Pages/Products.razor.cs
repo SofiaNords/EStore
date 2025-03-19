@@ -10,7 +10,9 @@ namespace EStore.Components.Pages
         private bool isLoading = true;
         private string errorMessage;
         private bool isConfirmDialogVisible = false;
+        private bool isEditDialogVisible = false;
         private string productIdToDelete;
+        private ProductDto productToEdit;
 
         [Inject]
         public HttpClient Http { get; set; }
@@ -61,5 +63,46 @@ namespace EStore.Components.Pages
             }
             isConfirmDialogVisible = false;
         }
+
+        private void PrepareEdit(ProductDto product)
+        {
+            productToEdit = product;
+            isEditDialogVisible = true;
+        }
+
+        private async Task HandleEditSave(ProductForUpdateDto updatedProduct)
+        {
+            try
+            {
+                var response = await Http.PutAsJsonAsync($"api/products/{productToEdit.Id}", updatedProduct);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = products.FindIndex(p => p.Id == productToEdit.Id);
+                    if (index >= 0)
+                    {
+                        products[index].ProductNumber = updatedProduct.ProductNumber;
+                        products[index].Name = updatedProduct.Name;
+                        products[index].Price = updatedProduct.Price;
+                        products[index].IsDiscontinued = updatedProduct.IsDiscontinued;
+                    }
+                    isEditDialogVisible = false; 
+                }
+                else
+                {
+                    errorMessage = "Något gick fel vid uppdatering av produkten.";
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Något gick fel: {ex.Message}";
+            }
+        }
+
+        private void HandleEditCancel()
+        {
+            isEditDialogVisible = false;  
+        }
     }
+
+
 }
