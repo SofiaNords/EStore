@@ -13,6 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient
 });
 
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CustomerService>();
 
 var app = builder.Build();
 
