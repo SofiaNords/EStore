@@ -5,6 +5,11 @@
 
 <h3>Produkter</h3>
 
+<div class="mb-3">
+    <input type="text" class="form-control" placeholder="Sök efter produktnamn eller produktnummer" @bind="_searchQuery" />
+    <button class="btn btn-primary mt-2" @onclick="SearchProducts">Sök</button>
+</div>
+
 <button class="btn btn-success" @onclick="() => PrepareCreate()">Lägg till produkt</button>
 
 @if (isLoading) 

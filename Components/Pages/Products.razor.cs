@@ -13,6 +13,7 @@ namespace EStore.Components.Pages
         private bool isDescriptionModalVisible = false;
         private bool isCreationModalVisible = false;
 
+        private string _searchQuery;
         private string _currentDescription;
         private ProductDto _productToEdit;
         private ProductForCreationDto _productForCreation = new ProductForCreationDto();
@@ -36,6 +37,23 @@ namespace EStore.Components.Pages
             finally
             {
                 isLoading = false; 
+            }
+        }
+
+        private async Task SearchProducts()
+        {
+            isLoading = true;
+            try
+            {
+                _products = await ProductService.GetProductsAsync(null, _searchQuery, null);
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = $"Något gick fel: {ex.Message}";
+            }
+            finally
+            {
+                isLoading = false;
             }
         }
 

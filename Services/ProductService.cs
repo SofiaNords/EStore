@@ -17,6 +17,21 @@ namespace EStore.Services
             return await _httpClient.GetFromJsonAsync<List<ProductDto>>("api/products");
         }
 
+        public async Task<List<ProductDto>> GetProductsAsync(string? name = null, string? searchQuery = null, string? productNumber = null)
+        {
+            var url = "api/products?";
+            if (!string.IsNullOrEmpty(name))
+                url += $"name={name}&";
+            if (!string.IsNullOrEmpty(searchQuery))
+                url += $"searchQuery={searchQuery}&";
+            if (!string.IsNullOrEmpty(productNumber))
+                url += $"productNumber={productNumber}&";
+            url = url.TrimEnd('&');
+
+            return await _httpClient.GetFromJsonAsync<List<ProductDto>>(url);
+        }
+
+
         public async Task<ProductDto> CreateProductAsync(ProductForCreationDto product)
         {
             var response = await _httpClient.PostAsJsonAsync("api/products", product);
