@@ -9,9 +9,10 @@ namespace EStore.Components.Pages
     {
         private bool _isLoading = true;
         private bool _isCreationModalVisible = false;
+        private bool _isEditDialogVisible = false;
 
         private string _errorMessage;
-
+        private CustomerDto _customerToEdit;
         private List<CustomerDto> _customers = new List<CustomerDto>();
 
         private CustomerForCreationDto _customerForCreation = new CustomerForCreationDto();
@@ -60,6 +61,43 @@ namespace EStore.Components.Pages
         private void HandleCreateCancel()
         {
             _isCreationModalVisible = false;
+        }
+
+        private void PrepareEdit(CustomerDto customer)
+        {
+            _customerToEdit = customer;
+            _isEditDialogVisible = true;
+        }
+
+        private async Task HandleEditSave(CustomerForUpdateDto updatedCustomer)
+        {
+            try
+            {
+                await CustomerService.UpdateCustomerAsync(_customerToEdit.Id, updatedCustomer);
+
+                var index = _customers.FindIndex(c => c.Id == _customerToEdit.Id);
+
+                if (index >= 0)
+                {
+                    _customers[index].FirstName = updatedCustomer.FirstName;
+                    _customers[index].LastName = updatedCustomer.LastName;
+                    _customers[index].Email = updatedCustomer.Email;
+                    _customers[index].Mobile = updatedCustomer.Mobile;
+                    _customers[index].Street = updatedCustomer.Street;
+                    _customers[index].PostalCode = updatedCustomer.PostalCode;
+                    _customers[index].City = updatedCustomer.City;
+                    _customers[index].Country = updatedCustomer.Country;
+                }
+                _isEditDialogVisible = false;
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = $"Något gick fel: {ex.Message}";
+            }
+        }
+        private void HandleEditCancel()
+        {
+            _isEditDialogVisible = false;
         }
     }
 }
