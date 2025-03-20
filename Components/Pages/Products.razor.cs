@@ -1,4 +1,5 @@
-﻿using EStoreAPI.Models;
+﻿using EStore.Services;
+using EStoreAPI.Models;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 
@@ -12,25 +13,25 @@ namespace EStore.Components.Pages
         private bool isDescriptionModalVisible = false;
         private bool isCreationModalVisible = false;
 
-        private string currentDescription;
-        private ProductDto productToEdit;
-        private ProductForCreationDto productForCreation = new ProductForCreationDto();
-        private string productIdToDelete;
-        private List<ProductDto> products = new List<ProductDto>();
-        private string errorMessage;
+        private string _currentDescription;
+        private ProductDto _productToEdit;
+        private ProductForCreationDto _productForCreation = new ProductForCreationDto();
+        private string _productIdToDelete;
+        private List<ProductDto> _products = new List<ProductDto>();
+        private string _errorMessage;
 
         [Inject]
-        public HttpClient Http { get; set; }
+        public ProductService ProductService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+                _products = await ProductService.GetProductsAsync();
             }
             catch (Exception ex)
             {
-                errorMessage = $"Något gick fel: {ex.Message}";
+                _errorMessage = $"Något gick fel: {ex.Message}";
             }
             finally
             {
@@ -40,7 +41,7 @@ namespace EStore.Components.Pages
 
         private void ShowDescription(string description)
         {
-            currentDescription = description;
+            _currentDescription = description;
             isDescriptionModalVisible = true;
         }
 
@@ -51,7 +52,7 @@ namespace EStore.Components.Pages
 
         private void PrepareCreate()
         {
-            productForCreation = new ProductForCreationDto();
+            _productForCreation = new ProductForCreationDto();
             isCreationModalVisible = true;
         }
 
@@ -59,21 +60,15 @@ namespace EStore.Components.Pages
         {
             try
             {
-                var response = await Http.PostAsJsonAsync("api/products", newProduct);
-                if (response.IsSuccessStatusCode)
-                {
-                    var createdProduct = await response.Content.ReadFromJsonAsync<ProductDto>();
-                    products.Add(createdProduct); // Add the new product to the list
-                    isCreationModalVisible = false; // Hide the modal
-                }
-                else
-                {
-                    errorMessage = "Något gick fel vid skapandet av produkten.";
-                }
+                var createdProduct = await ProductService.CreateProductAsync(newProduct);
+
+                _products.Add(createdProduct);
+
+                isCreationModalVisible = false;
             }
             catch (Exception ex)
             {
-                errorMessage = $"Något gick fel: {ex.Message}";
+                _errorMessage = $"Något gick fel: {ex.Message}";
             }
         }
 
@@ -84,30 +79,24 @@ namespace EStore.Components.Pages
 
         private void PrepareDelete(string productId)
         {
-            productIdToDelete = productId;
+            _productIdToDelete = productId;
             isConfirmDialogVisible = true;
         }
 
 
         private async Task HandleDeleteConfirmation(bool isConfirmed)
         {
-            if (isConfirmed && !string.IsNullOrEmpty(productIdToDelete))
+            if (isConfirmed && !string.IsNullOrEmpty(_productIdToDelete))
             {
                 try
                 {
-                    var response = await Http.DeleteAsync($"api/products/{productIdToDelete}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        products.RemoveAll(p => p.Id == productIdToDelete);
-                    }
-                    else
-                    {
-                        errorMessage = "Något gick fel vid borttagning av produkten.";
-                    }
+                    await ProductService.DeleteProductAsync(_productIdToDelete);
+
+                    _products.RemoveAll(p => p.Id == _productIdToDelete);
                 }
                 catch (Exception ex)
                 {
-                    errorMessage = $"Något gick fel: {ex.Message}";
+                    _errorMessage = $"Något gick fel: {ex.Message}";
                 }
             }
             isConfirmDialogVisible = false;
@@ -115,7 +104,7 @@ namespace EStore.Components.Pages
 
         private void PrepareEdit(ProductDto product)
         {
-            productToEdit = product;
+            _productToEdit = product;
             isEditDialogVisible = true;
         }
 
@@ -123,29 +112,25 @@ namespace EStore.Components.Pages
         {
             try
             {
-                var response = await Http.PutAsJsonAsync($"api/products/{productToEdit.Id}", updatedProduct);
-                if (response.IsSuccessStatusCode)
+                await ProductService.UpdateProductAsync(_productToEdit.Id, updatedProduct);
+
+                var index = _products.FindIndex(p => p.Id == _productToEdit.Id);
+
+                if (index >= 0)
                 {
-                    var index = products.FindIndex(p => p.Id == productToEdit.Id);
-                    if (index >= 0)
-                    {
-                        products[index].ProductNumber = updatedProduct.ProductNumber;
-                        products[index].Name = updatedProduct.Name;
-                        products[index].Description = updatedProduct.Description;
-                        products[index].Price = updatedProduct.Price;
-                        products[index].Category = updatedProduct.Category;
-                        products[index].IsDiscontinued = updatedProduct.IsDiscontinued;
-                    }
-                    isEditDialogVisible = false; 
+                    _products[index].ProductNumber = updatedProduct.ProductNumber;
+                    _products[index].Name = updatedProduct.Name;
+                    _products[index].Description = updatedProduct.Description;
+                    _products[index].Price = updatedProduct.Price;
+                    _products[index].Category = updatedProduct.Category;
+                    _products[index].IsDiscontinued = updatedProduct.IsDiscontinued;
                 }
-                else
-                {
-                    errorMessage = "Något gick fel vid uppdatering av produkten.";
-                }
+                isEditDialogVisible = false; 
+
             }
             catch (Exception ex)
             {
-                errorMessage = $"Något gick fel: {ex.Message}";
+                _errorMessage = $"Något gick fel: {ex.Message}";
             }
         }
 
