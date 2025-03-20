@@ -15,5 +15,15 @@ namespace EStore.Services
         {
             return await _httpClient.GetFromJsonAsync<List<CustomerDto>>("api/customers");
         }
+
+        public async Task<CustomerDto> CreateCustomerAsync(CustomerForCreationDto customer)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/customers", customer);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<CustomerDto>();
+            }
+            throw new Exception("Något gick fel vid skapandet av produkten.");
+        }
     }
 }
