@@ -1,6 +1,11 @@
 ﻿@page "/customers"
+@using EStore.Components.Dialogs
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
 
 <h3>Kunder</h3>
+
+<button class="btn btn-success" @onclick="() => PrepareCreate()">Lägg till kund</button>
 
 @if (_isLoading)
 {
@@ -45,5 +50,13 @@ else if (_customers.Any())
 else
 {
     <p>Inga kunder hittades.</p>
+}
+
+@if (_isCreationModalVisible)
+{
+    <CustomerCreateDialog Customer="_customerForCreation"
+                         IsVisible="_isCreationModalVisible"
+                         OnSave="HandleCreateSave"
+                         OnCancel="HandleCreateCancel" />
 }
 
