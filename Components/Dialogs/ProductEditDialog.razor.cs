@@ -1,7 +1,7 @@
 ﻿using EStoreAPI.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace EStore.Components
+namespace EStore.Components.Dialogs
 {
     public partial class ProductEditDialog
     {
