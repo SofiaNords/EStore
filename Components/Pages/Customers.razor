@@ -1,0 +1,49 @@
+﻿@page "/customers"
+
+<h3>Kunder</h3>
+
+@if (_isLoading)
+{
+    <p>Hämtar kunder...</p>
+}
+else if (_errorMessage != null)
+{
+    <p class="text-danger">@_errorMessage</p>
+}
+else if (_customers.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Förnamn</th>
+                <th>Efternamn</th>
+                <th>Email</th>
+                <th>Mobilnummer</th>
+                <th>Gatuadress</th>
+                <th>Postort</th>
+                <th>Postnummer</th>
+                <th>Land</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in _customers)
+            {
+                <tr>
+                    <td>@customer.FirstName</td>
+                    <td>@customer.LastName</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.Mobile</td>
+                    <td>@customer.Street</td>
+                    <td>@customer.City</td>
+                    <td>@customer.PostalCode</td>
+                    <td>@customer.Country</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Inga kunder hittades.</p>
+}
+
