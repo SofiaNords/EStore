@@ -25,5 +25,14 @@ namespace EStore.Services
             }
             throw new Exception("Något gick fel vid skapandet av kunden.");
         }
+
+        public async Task UpdateCustomerAsync(string customerId, CustomerForUpdateDto updatedCustomer)
+        {
+            var respnse = await _httpClient.DeleteAsync($"api/customers/{customerId}");
+            if (!respnse.IsSuccessStatusCode)
+            {
+                throw new Exception("Något gick fel vid uppdatering av kunden.");
+            }
+        }
     }
 }
