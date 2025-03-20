@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<div class="modal @GetModalClass()" tabindex="-1" role="dialog" aria-hidden="@(IsVisible ? "false" : "true")">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lägg till produkt</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="HandleCancel">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label>Förnamn</label>
+                    <input type="text" @bind="_createdCustomer.FirstName" class="form-control" />
+                </div>
+                <div>
+                    <label>Efternamn</label>
+                    <input type="text" @bind="_createdCustomer.LastName" class="form-control" />
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="text" @bind="_createdCustomer.Email" class="form-control" />
+                </div>
+                <div>
+                    <label>Mobilnummer</label>
+                    <input type="number" @bind="_createdCustomer.Mobile" class="form-control" />
+                </div>
+                <div>
+                    <label>Gatuadress</label>
+                    <input type="text" @bind="_createdCustomer.Street" class="form-control" />
+                </div> 
+                <div>
+                    <label>Postnummer</label>
+                    <input type="text" @bind="_createdCustomer.PostalCode" class="form-control" />
+                </div>
+                <div>
+                    <label>Postort</label>
+                    <input type="text" @bind="_createdCustomer.City" class="form-control" />
+                </div>
+                <div>
+                    <label>Land</label>
+                    <input type="text" @bind="_createdCustomer.Country" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+                <button type="button" class="btn btn-primary" @onclick="HandleSave">Spara</button>
+            </div>
+        </div>
+    </div>
+</div>
