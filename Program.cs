@@ -1,4 +1,5 @@
 using EStore.Components;
+using EStore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddScoped(sp => new HttpClient
 {
     BaseAddress = new Uri("https://localhost:7104")
 });
+
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 
