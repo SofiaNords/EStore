@@ -13,7 +13,7 @@ namespace EStore.Services
 
         public async Task<List<CustomerDto>> GetCustomersAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<CustomerDto>>("api/products");
+            return await _httpClient.GetFromJsonAsync<List<CustomerDto>>("api/customers");
         }
     }
 }
