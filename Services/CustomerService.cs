@@ -23,7 +23,7 @@ namespace EStore.Services
             {
                 return await response.Content.ReadFromJsonAsync<CustomerDto>();
             }
-            throw new Exception("Något gick fel vid skapandet av produkten.");
+            throw new Exception("Något gick fel vid skapandet av kunden.");
         }
     }
 }
