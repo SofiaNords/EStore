@@ -42,6 +42,9 @@ else if (_customers.Any())
                     <td>@customer.City</td>
                     <td>@customer.PostalCode</td>
                     <td>@customer.Country</td>
+                    <td>
+                        <button class="btn btn-warning" @onclick="() => PrepareEdit(customer)">Redigera</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -60,3 +63,10 @@ else
                          OnCancel="HandleCreateCancel" />
 }
 
+@if (_isEditDialogVisible)
+{
+    <CustomerEditDialog Customer="_customerToEdit"
+                       IsVisible="_isEditDialogVisible"
+                       OnSave="HandleEditSave"
+                       OnCancel="HandleEditCancel" />
+}
