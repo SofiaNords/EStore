@@ -2,7 +2,7 @@
 
 namespace EStore.Components
 {
-    public partial class ConfirmDeleteDialog
+    public partial class ProductDeleteConfirmDialog
     {
         [Parameter] public EventCallback<bool> OnConfirmed { get; set; }
         [Parameter] public bool IsVisible { get; set; }
