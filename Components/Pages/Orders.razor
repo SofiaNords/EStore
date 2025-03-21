@@ -22,7 +22,6 @@ else if (_orders.Any())
 			<tr>
 				<th>OrderId</th>
 				<th>Customer</th>
-				<th>Order Items</th>
 				<th>OrderDate</th>
 				<th>Total Amount</th>
 			</tr>
@@ -33,7 +32,6 @@ else if (_orders.Any())
 				<tr>
 					<td>@order.Id</td>
 					<td>@_customerNames.GetValueOrDefault(order.CustomerId, "Okänd kund")</td>
-					<td>@order.Items</td>
 					<td>@order.OrderDate</td>
 					<td>@CalculateOrderTotal(order).ToString("C")</td>
 				</tr>
