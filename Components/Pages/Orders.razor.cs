@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace EStore.Components.Pages
 {
-    public partial class Orders
+    public partial class Orders : ComponentBase
     {
         private bool _isLoading = true;
 

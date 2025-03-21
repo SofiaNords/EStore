@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 
 namespace EStore.Components.Pages
 {
-    public partial class Products
+    public partial class Products : ComponentBase
     {
         private bool isLoading = true;
         private bool isEditDialogVisible = false;
