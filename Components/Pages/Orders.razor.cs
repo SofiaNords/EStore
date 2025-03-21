@@ -14,14 +14,30 @@ namespace EStore.Components.Pages
         private OrderForCreationDto _orderForCreation = new OrderForCreationDto();
         private string _errorMessage;
 
+        private Dictionary<string, string> _customerNames = new Dictionary<string, string>();
+
+
         [Inject]
         public OrderService OrderService { get; set; }
+
+        [Inject]
+        public CustomerService CustomerService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
                 _orders = await OrderService.GetOrdersAsync();
+
+                // Hämta alla kundnamn för de ordrar vi har.
+                foreach (var order in _orders)
+                {
+                    if (!_customerNames.ContainsKey(order.CustomerId))
+                    {
+                        var customerName = await GetCustomerNameAsync(order.CustomerId);
+                        _customerNames[order.CustomerId] = customerName;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -59,5 +75,17 @@ namespace EStore.Components.Pages
         {
             _isCreationModalVisible = false;
         }
+
+        private async Task<string> GetCustomerNameAsync(string customerId)
+        {
+            var customer = await CustomerService.GetCustomerByIdAsync(customerId);
+            return customer != null ? $"{customer.FirstName} {customer.LastName}" : "Okänd kund";
+        }
+
+        private decimal CalculateOrderTotal(OrderDto order)
+        {
+            return order.Items.Sum(item => item.Price * item.Quantity);
+        }
+
     }
 }
