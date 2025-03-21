@@ -1,4 +1,5 @@
 ﻿using EStoreAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EStore.Services
 {
@@ -14,6 +15,16 @@ namespace EStore.Services
         public async Task<List<CustomerDto>> GetCustomersAsync()
         {
             return await _httpClient.GetFromJsonAsync<List<CustomerDto>>("api/customers");
+        }
+
+        public async Task<List<CustomerDto>> GetCustomersAsync([FromQuery] string? searchQuery)
+        {
+            var url = "api/customers?";
+            if (!string.IsNullOrEmpty(searchQuery))
+                url += $"searchQuery={searchQuery}&";
+            url = url.TrimEnd('&');
+
+            return await _httpClient.GetFromJsonAsync<List<CustomerDto>>(url);
         }
 
         public async Task<CustomerDto> CreateCustomerAsync(CustomerForCreationDto customer)
