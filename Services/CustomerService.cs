@@ -45,5 +45,11 @@ namespace EStore.Services
                 throw new Exception("Något gick fel vid uppdatering av kunden.");
             }
         }
+
+        public async Task<CustomerDto> GetCustomerByIdAsync(string customerId)
+        {
+            return await _httpClient.GetFromJsonAsync<CustomerDto>($"api/customers/{customerId}");
+        }
     }
 }
+
