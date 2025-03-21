@@ -39,7 +39,8 @@ namespace EStore.Components.Dialogs
         {
             _createdOrder = new OrderForCreationDto
             {
-                Items = new List<OrderItemForCreationDto>() // Initiera Items-listan för ordern
+                Items = new List<OrderItemForCreationDto>(), // Initiera Items-listan för ordern
+                OrderDate = DateTime.Now // Sätt OrderDate till nuvarande datum och tid
             }; 
             _products = await ProductService.GetProductsAsync();
             _customers = await CustomerService.GetCustomersAsync();
