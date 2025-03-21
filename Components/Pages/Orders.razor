@@ -1,0 +1,53 @@
+﻿@page "/orders"
+@using EStore.Components.Dialogs
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+<h3>Ordrar</h3>
+
+<button class="btn btn-success" @onclick="() => PrepareCreate()">Skapa order</button>
+
+@if (_isLoading)
+{
+	<p>Hämtar ordrar...</p>
+}
+else if (_errorMessage != null)
+{
+	<p class="text-danger">@_errorMessage</p>
+}
+else if (_orders.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>OrderId</th>
+				<th>CudstomerId</th>
+				<th>Order Items</th>
+				<th>OrderDate</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var order in _orders)
+			{
+				<tr>
+					<td>@order.Id</td>
+					<td>@order.CustomerId</td>
+					<td>@order.Items</td>
+					<td>@order.OrderDate</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Inga produkter hittades</p>
+}
+
+@if (_isCreationModalVisible)
+{
+	<OrderCreateDialog Order="_orderForCreation"
+					   IsVisible="_isCreationModalVisible"
+					   OnSave="HandleCreateSave"
+					   OnCancel="HandleCreateCancel" />
+}
