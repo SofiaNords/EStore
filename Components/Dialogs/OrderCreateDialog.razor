@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<div class="modal @GetModalClass()" tabindex="-1" role="dialog" aria-hidden="@(IsVisible ? "false" : "true")">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lägg till produkt</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="HandleCancel">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Kundval -->
+                <div class="form-group">
+                    <label for="customerSelect">Välj kund</label>
+                    <select id="customerSelect" class="form-control" @bind="_createdOrder.CustomerId">
+                        <option value="">Välj kund</option>
+                        @foreach (var customer in _customers)
+                        {
+                            <option value="@customer.Id">@customer.FirstName @customer.LastName</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Lägg till produkt -->
+                <div class="form-group">
+                    <label for="productSelect">Välj produkt</label>
+                    <select id="productSelect" class="form-control" @bind="_selectedProductId">
+                        <option value="">Välj produkt</option>
+                        @foreach (var product in _products)
+                        {
+                            <option value="@product.Id">@product.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantityInput">Antal</label>
+                    <input type="number" class="form-control" id="quantity" @bind="_selectedQuantity" min="1" />
+                </div>
+
+                <button type="button" class="btn btn-info" @onclick="AddItemToOrder">Lägg till produkt</button>
+
+                <!-- Visa tillagda orderrader -->
+                <h5 class="mt-3">Orderrader:</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Produkt</th>
+                            <th>Antal</th>
+                            <th>Pris</th>
+                            <th>Totalt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in _createdOrder.Items)
+                        {
+                            <tr>
+                                <td>@_products.First(p => p.Id == item.ProductId).Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price.ToString("C")</td>
+                                <td>@(item.Quantity * item.Price).ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <!-- Totalbelopp -->
+                <div>
+                    <strong>Total: @_totalAmount.ToString("C")</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+                <button type="button" class="btn btn-primary" @onclick="HandleSave">Spara</button>
+            </div>
+        </div>
+    </div>
+</div>
