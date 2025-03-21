@@ -6,4 +6,39 @@
 <h3>Ordrar</h3>
 
 
-
+@if (_isLoading)
+{
+	<p>Hämtar ordrar...</p>
+}
+else if (_errorMessage != null)
+{
+	<p class="text-danger">@_errorMessage</p>
+}
+else if (_orders.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>OrderId</th>
+				<th>CudstomerId</th>
+				<th>Order Items</th>
+				<th>OrderDate</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var order in _orders)
+			{
+				<tr>
+					<td>@order.Id</td>
+					<td>@order.CustomerId</td>
+					<td>@order.Items</td>
+					<td>@order.OrderDate</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Inga produkter hittades</p>
+}
