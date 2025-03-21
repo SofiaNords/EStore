@@ -5,6 +5,7 @@
 
 <h3>Ordrar</h3>
 
+<button class="btn btn-success" @onclick="() => PrepareCreate()">Skapa order</button>
 
 @if (_isLoading)
 {
@@ -41,4 +42,12 @@ else if (_orders.Any())
 else
 {
 	<p>Inga produkter hittades</p>
+}
+
+@if (_isCreationModalVisible)
+{
+	<OrderCreateDialog Order="_orderForCreation"
+					   IsVisible="_isCreationModalVisible"
+					   OnSave="HandleCreateSave"
+					   OnCancel="HandleCreateCancel" />
 }
