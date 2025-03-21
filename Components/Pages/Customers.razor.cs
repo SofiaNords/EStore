@@ -11,6 +11,7 @@ namespace EStore.Components.Pages
         private bool _isCreationModalVisible = false;
         private bool _isEditDialogVisible = false;
 
+        private string _searchQuery;
         private string _errorMessage;
         private CustomerDto _customerToEdit;
         private List<CustomerDto> _customers = new List<CustomerDto>();
@@ -25,6 +26,23 @@ namespace EStore.Components.Pages
             try
             {
                 _customers = await CustomerService.GetCustomersAsync();
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = $"Något gick fel: {ex.Message}";
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+        }
+
+        private async Task SearchCustomers()
+        {
+            _isLoading = true;
+            try
+            {
+                _customers = await CustomerService.GetCustomersAsync(_searchQuery);
             }
             catch (Exception ex)
             {
