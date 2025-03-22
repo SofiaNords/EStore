@@ -25,6 +25,7 @@ else if (_orders.Any())
 				<th>Customer Email</th>
 				<th>OrderDate</th>
 				<th>Total Amount</th>
+				<th>Details</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -36,6 +37,9 @@ else if (_orders.Any())
 					<td>@_customerEmails.GetValueOrDefault(order.CustomerId, "Okänd kund")</td>
 					<td>@order.OrderDate</td>
 					<td>@CalculateOrderTotal(order).ToString("C")</td>
+					<td>
+						<button class="btn btn-warning" onclick="() => ShowDetails(order.Details)"></button>
+					</td>
 				</tr>
 			}
 		</tbody>
