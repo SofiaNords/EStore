@@ -61,5 +61,9 @@ namespace EStore.Services
             }
         }
 
+        public async Task<ProductDto> GetProductByIdAsync(string productId)
+        {
+            return await _httpClient.GetFromJsonAsync<ProductDto>($"api/products/{productId}");
+        }
     }
 }

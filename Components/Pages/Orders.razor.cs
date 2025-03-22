@@ -9,12 +9,15 @@ namespace EStore.Components.Pages
     {
         private bool _isLoading = true;
         private bool _isCreationModalVisible = false;
+        private bool _isDetailModalVisible = false;
 
+        private OrderDto _currentDetails;
         private List<OrderDto> _orders = new List<OrderDto>();
         private OrderForCreationDto _orderForCreation = new OrderForCreationDto();
         private string _errorMessage;
 
         private Dictionary<string, string> _customerNames = new Dictionary<string, string>();
+        private Dictionary<string, string> _customerEmails = new Dictionary<string, string>();
 
 
         [Inject]
@@ -36,6 +39,9 @@ namespace EStore.Components.Pages
                     {
                         var customerName = await GetCustomerNameAsync(order.CustomerId);
                         _customerNames[order.CustomerId] = customerName;
+
+                        var customerEmail = await GetCustomerEmailAsync(order.CustomerId);
+                        _customerEmails[order.CustomerId] = customerEmail;
                     }
                 }
             }
@@ -47,6 +53,17 @@ namespace EStore.Components.Pages
             {
                 _isLoading = false;
             }
+        }
+
+        private void ShowDetails(OrderDto details)
+        {
+            _currentDetails = details;
+            _isDetailModalVisible = true;
+        }
+
+        private void CloseDetailsModal()
+        {
+            _isDetailModalVisible = false;
         }
 
         private void PrepareCreate()
@@ -85,6 +102,12 @@ namespace EStore.Components.Pages
         private decimal CalculateOrderTotal(OrderDto order)
         {
             return order.Items.Sum(item => item.Price * item.Quantity);
+        }
+
+        private async Task<string> GetCustomerEmailAsync(string customerId)
+        {
+            var customer = await CustomerService.GetCustomerByIdAsync(customerId);
+            return customer != null ? $"{customer.Email}" : "Okänd epost";
         }
 
     }

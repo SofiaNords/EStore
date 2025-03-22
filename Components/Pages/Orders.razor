@@ -22,8 +22,10 @@ else if (_orders.Any())
 			<tr>
 				<th>OrderId</th>
 				<th>Customer</th>
+				<th>Customer Email</th>
 				<th>OrderDate</th>
 				<th>Total Amount</th>
+				<th>Details</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,8 +34,12 @@ else if (_orders.Any())
 				<tr>
 					<td>@order.Id</td>
 					<td>@_customerNames.GetValueOrDefault(order.CustomerId, "Okänd kund")</td>
+					<td>@_customerEmails.GetValueOrDefault(order.CustomerId, "Okänd kund")</td>
 					<td>@order.OrderDate</td>
 					<td>@CalculateOrderTotal(order).ToString("C")</td>
+					<td>
+						<button class="btn btn-warning" @onclick="() => ShowDetails(order)">Visa detaljer</button>
+					</td>
 				</tr>
 			}
 		</tbody>
@@ -47,7 +53,15 @@ else
 @if (_isCreationModalVisible)
 {
 	<OrderCreateDialog Order="_orderForCreation"
-					   IsVisible="_isCreationModalVisible"
-					   OnSave="HandleCreateSave"
-					   OnCancel="HandleCreateCancel" />
+	IsVisible="_isCreationModalVisible"
+	OnSave="HandleCreateSave"
+	OnCancel="HandleCreateCancel" />
 }
+
+@if (_isDetailModalVisible)
+{
+	<OrderDetailsDialog Order="_currentDetails"
+		IsVisible="_isDetailModalVisible"
+		Oncancel="CloseDetailsModal"/>
+}
+
