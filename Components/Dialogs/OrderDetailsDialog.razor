@@ -1,0 +1,68 @@
+﻿@using EStoreAPI.Models
+@inherits ComponentBase
+
+<div class="modal @GetModalClass()" tabindex="-1" role="dialog" aria-hidden="@(IsVisible ? "false" : "true")">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Orderdetaljer</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="HandleCancel">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Visa ordredetaljer -->
+                <div>
+                    <label>Order ID</label>
+                    <input type="text" value="@Order.Id" class="form-control" readonly />
+                </div>
+                <div>
+                    <label>Kund</label>
+                    <input type="text" value="@(_customerNames.ContainsKey(Order?.CustomerId) ? _customerNames[Order?.CustomerId] : "Laddar...")" class="form-control" readonly />
+                </div>
+                <div>
+                <label>Kundens e-post</label>
+                <input type="text" value="@(_customerEmails.ContainsKey(Order.CustomerId) ? _customerEmails[Order.CustomerId] : "Laddar...")" class="form-control" readonly />
+                </div>
+                <div>
+                    <label>Orderdatum</label>
+                    <input type="text" value="@Order?.OrderDate.ToString("yyyy-MM-dd")" class="form-control" readonly />
+                </div>
+
+                <!-- Visa orderartiklar -->
+                <h5>Orderartiklar</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Produktnamn</th>
+                            <th>Antal</th>
+                            <th>Pris</th>
+                            <th>Totalt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Order?.Items != null)
+                        {
+                            foreach (var item in Order.Items)
+                            {
+                                <tr>
+                                    <td>@(_productNames.ContainsKey(item.ProductId) ? _productNames[item.ProductId] : "Laddar...")</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Price</td>
+                                    <td>@(item.Quantity * item.Price)</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+            </div>
+            <!-- Visa totalsumma längst ned -->
+            <div class="modal-body">
+                <h5>Total Amount: @CalculateOrderTotal(Order).ToString("C")</h5>
+            </div>
+        </div>
+    </div>
+</div>
