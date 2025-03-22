@@ -15,6 +15,7 @@ namespace EStore.Components.Pages
         private string _errorMessage;
 
         private Dictionary<string, string> _customerNames = new Dictionary<string, string>();
+        private Dictionary<string, string> _customerEmails = new Dictionary<string, string>();
 
 
         [Inject]
@@ -36,6 +37,9 @@ namespace EStore.Components.Pages
                     {
                         var customerName = await GetCustomerNameAsync(order.CustomerId);
                         _customerNames[order.CustomerId] = customerName;
+
+                        var customerEmail = await GetCustomerEmailAsync(order.CustomerId);
+                        _customerEmails[order.CustomerId] = customerEmail;
                     }
                 }
             }
@@ -85,6 +89,12 @@ namespace EStore.Components.Pages
         private decimal CalculateOrderTotal(OrderDto order)
         {
             return order.Items.Sum(item => item.Price * item.Quantity);
+        }
+
+        private async Task<string> GetCustomerEmailAsync(string customerId)
+        {
+            var customer = await CustomerService.GetCustomerByIdAsync(customerId);
+            return customer != null ? $"{customer.Email}" : "Okänd epost";
         }
 
     }
