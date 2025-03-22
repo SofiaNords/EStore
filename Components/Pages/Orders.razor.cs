@@ -9,7 +9,9 @@ namespace EStore.Components.Pages
     {
         private bool _isLoading = true;
         private bool _isCreationModalVisible = false;
+        private bool _isDetailModalVisible = false;
 
+        private OrderDto _currentDetails;
         private List<OrderDto> _orders = new List<OrderDto>();
         private OrderForCreationDto _orderForCreation = new OrderForCreationDto();
         private string _errorMessage;
@@ -51,6 +53,17 @@ namespace EStore.Components.Pages
             {
                 _isLoading = false;
             }
+        }
+
+        private void ShowDetails(OrderDto details)
+        {
+            _currentDetails = details;
+            _isDetailModalVisible = true;
+        }
+
+        private void CloseDetailsModal()
+        {
+            _isDetailModalVisible = false;
         }
 
         private void PrepareCreate()
