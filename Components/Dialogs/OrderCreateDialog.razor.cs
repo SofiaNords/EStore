@@ -27,6 +27,7 @@ namespace EStore.Components.Dialogs
         private int _selectedQuantity = 1;
         private decimal _totalAmount = 0;
 
+
         [Inject]
         public ProductService ProductService { get; set; }
 
@@ -43,6 +44,8 @@ namespace EStore.Components.Dialogs
                 OrderDate = DateTime.Now // Sätt OrderDate till nuvarande datum och tid
             }; 
             _products = await ProductService.GetProductsAsync();
+            // Filtrera bort utgångna produkter
+            _products = _products.Where(p => !p.IsDiscontinued).ToList();
             _customers = await CustomerService.GetCustomersAsync();
         }
 
@@ -59,7 +62,7 @@ namespace EStore.Components.Dialogs
                 };
 
                 _createdOrder.Items.Add(item);
-                _totalAmount += item.Quantity * item.Price;  // Uppdatera totalbelopp
+                _totalAmount += item.Quantity * item.Price;  
             }
         }
 
