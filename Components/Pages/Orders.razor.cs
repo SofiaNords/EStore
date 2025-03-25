@@ -1,4 +1,5 @@
 ﻿using EStore.Services;
+using EStoreAPI.Entities;
 using EStoreAPI.Models;
 using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
@@ -10,9 +11,11 @@ namespace EStore.Components.Pages
         private bool _isLoading = true;
         private bool _isCreationModalVisible = false;
         private bool _isDetailModalVisible = false;
+        private string _searchQuery;
 
         private OrderDto _currentDetails;
         private List<OrderDto> _orders = new List<OrderDto>();
+        private List<CustomerDto> _customers = new List<CustomerDto>();
         private OrderForCreationDto _orderForCreation = new OrderForCreationDto();
         private string _errorMessage;
 
@@ -54,6 +57,42 @@ namespace EStore.Components.Pages
                 _isLoading = false;
             }
         }
+
+        private async Task SearchOrderByCustomerEmail()
+        {
+            _isLoading = true;
+            try
+            {
+                // Hämta alla kunder
+                var customers = await CustomerService.GetCustomersAsync();
+
+                // Hitta alla kunder vars e-postadress innehåller den angivna söksträngen
+                var matchingCustomers = customers.Where(c => c.Email.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                if (matchingCustomers.Any())
+                {
+                    // Hämta alla ordrar och filtrera de som är kopplade till de här kunderna
+                    _orders = (await OrderService.GetOrdersAsync())
+                                .Where(order => matchingCustomers.Any(c => c.Id == order.CustomerId))
+                                .ToList();
+                }
+                else
+                {
+                    _orders.Clear();  // Om ingen kund matchar, töm listan
+                    _errorMessage = "Ingen kund hittades med den e-postadressen.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = $"Något gick fel: {ex.Message}";
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+        }
+
+
 
         private void ShowDetails(OrderDto details)
         {
