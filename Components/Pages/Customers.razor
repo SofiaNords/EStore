@@ -30,8 +30,8 @@ else if (_customers.Any())
                 <th>Email</th>
                 <th>Mobilnummer</th>
                 <th>Gatuadress</th>
-                <th>Postort</th>
                 <th>Postnummer</th>
+                <th>Postort</th>
                 <th>Land</th>
             </tr>
         </thead>
@@ -44,8 +44,8 @@ else if (_customers.Any())
                     <td>@customer.Email</td>
                     <td>@customer.Mobile</td>
                     <td>@customer.Street</td>
-                    <td>@customer.City</td>
                     <td>@customer.PostalCode</td>
+                    <td>@customer.City</td>
                     <td>@customer.Country</td>
                     <td>
                         <button class="btn btn-warning" @onclick="() => PrepareEdit(customer)">Redigera</button>
