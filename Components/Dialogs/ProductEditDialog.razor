@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using EStoreAPI.Models
 
 <div class="modal @GetModalClass()" tabindex="-1" role="dialog" aria-hidden="@(IsVisible ? "false" : "true")">
     <div class="modal-dialog" role="document">
@@ -10,34 +11,40 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div>
-                    <label>Produktnummer</label>
-                    <input type="text" @bind="editedProduct.ProductNumber" class="form-control" />
-                </div>
-                <div>
-                    <label>Namn</label>
-                    <input type="text" @bind="editedProduct.Name" class="form-control" />
-                </div>
-                <div>
-                    <label>Beskrivning</label>
-                    <input type="text" @bind="editedProduct.Description" class="form-control" />
-                </div>
-                <div>
-                    <label>Pris</label>
-                    <input type="number" @bind="editedProduct.Price" class="form-control" />
-                </div>
-                <div>
-                    <label>Produktkategori</label>
-                    <input type="text" @bind="editedProduct.Category" class="form-control" />
-                </div>
-                <div>
-                    <label>Utgått ur sortimentet</label>
-                    <input type="checkbox" @bind="editedProduct.IsDiscontinued" class="form-check-input" />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
-                <button type="button" class="btn btn-primary" @onclick="HandleSave">Spara</button>
+                <EditForm Model="editedProduct" OnValidSubmit="HandleSave" Context="editContext">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div>
+                        <label>Produktnummer</label>
+                        <InputText @bind-Value="editedProduct.ProductNumber" class="form-control" />
+                    </div>
+                    <div>
+                        <label>Namn</label>
+                        <InputText @bind-Value="editedProduct.Name" class="form-control" />
+                    </div>
+                    <div>
+                        <label>Beskrivning</label>
+                        <InputText @bind-Value="editedProduct.Description" class="form-control" />
+                    </div>
+                    <div>
+                        <label>Pris</label>
+                        <InputNumber @bind-Value="editedProduct.Price" class="form-control" />
+                    </div>
+                    <div>
+                        <label>Produktkategori</label>
+                        <InputText @bind-Value="editedProduct.Category" class="form-control" />
+                    </div>
+                    <div>
+                        <label>Utgått ur sortimentet</label>
+                        <InputCheckbox @bind-Value="editedProduct.IsDiscontinued" class="form-check-input" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Avbryt</button>
+                        <button type="submit" class="btn btn-primary" disabled="@(editContext?.Validate() == false)">Spara</button>
+                    </div>
+                </EditForm>
             </div>
         </div>
     </div>
