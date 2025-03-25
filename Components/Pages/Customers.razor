@@ -8,6 +8,7 @@
 <div class="mb-3">
     <input type="text" class="form-control" placeholder="Sök efter kundens epost" @bind="_searchQuery" />
     <button class="btn btn-primary mt-2" @onclick="SearchCustomers">Sök</button>
+    <button class="btn btn-secondary mt-2 ms-2" @onclick="ClearSearch">Rensa</button>
 </div>
 
 <button class="btn btn-success" @onclick="() => PrepareCreate()">Lägg till kund</button>
@@ -30,8 +31,8 @@ else if (_customers.Any())
                 <th>Email</th>
                 <th>Mobilnummer</th>
                 <th>Gatuadress</th>
-                <th>Postort</th>
                 <th>Postnummer</th>
+                <th>Postort</th>
                 <th>Land</th>
             </tr>
         </thead>
@@ -44,8 +45,8 @@ else if (_customers.Any())
                     <td>@customer.Email</td>
                     <td>@customer.Mobile</td>
                     <td>@customer.Street</td>
-                    <td>@customer.City</td>
                     <td>@customer.PostalCode</td>
+                    <td>@customer.City</td>
                     <td>@customer.Country</td>
                     <td>
                         <button class="btn btn-warning" @onclick="() => PrepareEdit(customer)">Redigera</button>

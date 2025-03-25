@@ -23,6 +23,11 @@ namespace EStore.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            await LoadCustomersAsync();
+        }
+
+        private async Task LoadCustomersAsync()
+        {
             try
             {
                 _customers = await CustomerService.GetCustomersAsync();
@@ -39,6 +44,7 @@ namespace EStore.Components.Pages
 
         private async Task SearchCustomers()
         {
+            _errorMessage = null;
             _isLoading = true;
             try
             {
@@ -46,12 +52,21 @@ namespace EStore.Components.Pages
             }
             catch (Exception ex)
             {
-                _errorMessage = $"Något gick fel: {ex.Message}";
+                _errorMessage = $"Inga kunder hittades";
             }
             finally
             {
                 _isLoading = false;
             }
+        }
+
+        private async Task ClearSearch()
+        {
+            _searchQuery = string.Empty;
+            _errorMessage = null;
+            _isLoading = true;
+
+            await LoadCustomersAsync();
         }
 
         private void PrepareCreate()
