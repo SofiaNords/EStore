@@ -36,15 +36,14 @@ namespace EStore.Components.Dialogs
 
         private string GetModalClass() => IsVisible ? "show d-block" : "fade";
 
-        protected override async void OnParametersSet()
+        protected override async Task OnInitializedAsync()
         {
             _createdOrder = new OrderForCreationDto
             {
-                Items = new List<OrderItemForCreationDto>(), // Initiera Items-listan för ordern
-                OrderDate = DateTime.Now // Sätt OrderDate till nuvarande datum och tid
+                Items = new List<OrderItemForCreationDto>(),
+                OrderDate = DateTime.Now 
             }; 
             _products = await ProductService.GetProductsAsync();
-            // Filtrera bort utgångna produkter
             _products = _products.Where(p => !p.IsDiscontinued).ToList();
             _customers = await CustomerService.GetCustomersAsync();
         }
