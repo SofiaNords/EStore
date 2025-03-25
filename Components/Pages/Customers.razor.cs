@@ -39,6 +39,7 @@ namespace EStore.Components.Pages
 
         private async Task SearchCustomers()
         {
+            _errorMessage = null;
             _isLoading = true;
             try
             {
@@ -46,7 +47,7 @@ namespace EStore.Components.Pages
             }
             catch (Exception ex)
             {
-                _errorMessage = $"Något gick fel: {ex.Message}";
+                _errorMessage = $"Inga kunder hittades";
             }
             finally
             {
