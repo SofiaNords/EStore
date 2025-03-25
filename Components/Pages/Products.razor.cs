@@ -26,6 +26,11 @@ namespace EStore.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            await LoadProductsAsync();
+        }
+
+        private async Task LoadProductsAsync()
+        {
             try
             {
                 _products = await ProductService.GetProductsAsync();
@@ -36,7 +41,7 @@ namespace EStore.Components.Pages
             }
             finally
             {
-                isLoading = false; 
+                isLoading = false;
             }
         }
 
@@ -67,6 +72,15 @@ namespace EStore.Components.Pages
         private void CloseDescriptionModal()
         {
             isDescriptionModalVisible = false;
+        }
+
+        private async Task ClearSearch()
+        {
+            _searchQuery = string.Empty;
+            _errorMessage = null;
+            isLoading = true;
+
+            await LoadProductsAsync();
         }
 
         private void PrepareCreate()
