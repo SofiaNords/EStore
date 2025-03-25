@@ -59,7 +59,7 @@
                                 <td>@_products.First(p => p.Id == item.ProductId).Name</td>
                                 <td>@item.Quantity</td>
                                 <td>@item.Price.ToString("C")</td>
-                                <td>@(item.Quantity * item.Price).ToString("C")</td>
+                                <td>@($"{(item.Quantity * item.Price):C}")</td>
                             </tr>
                         }
                     </tbody>
