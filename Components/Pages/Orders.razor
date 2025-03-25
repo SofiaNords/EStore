@@ -5,6 +5,11 @@
 
 <h3>Ordrar</h3>
 
+<div class="mb-3">
+	<input type="text" class="form-control" placeholder="Sök order via kundens epost" @bind="_searchQuery" />
+	<button class="btn btn-primary mt-2" @onclick="SearchOrderByCustomerEmail">Sök</button>
+</div>
+
 <button class="btn btn-success" @onclick="() => PrepareCreate()">Skapa order</button>
 
 @if (_isLoading)
