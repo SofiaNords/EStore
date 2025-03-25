@@ -8,6 +8,7 @@
 <div class="mb-3">
     <input type="text" class="form-control" placeholder="Sök efter kundens epost" @bind="_searchQuery" />
     <button class="btn btn-primary mt-2" @onclick="SearchCustomers">Sök</button>
+    <button class="btn btn-secondary mt-2 ms-2" @onclick="ClearSearch">Rensa</button>
 </div>
 
 <button class="btn btn-success" @onclick="() => PrepareCreate()">Lägg till kund</button>
