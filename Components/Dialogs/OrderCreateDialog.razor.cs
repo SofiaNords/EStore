@@ -16,6 +16,8 @@ namespace EStore.Components.Dialogs
         public EventCallback OnCancel { get; set; }
 
         private OrderForCreationDto _createdOrder;
+        private string _errorMessageProductNotAdded;
+        private string _errorMessageProductNotChosen;
 
         [Parameter]
         public bool IsVisible { get; set; }
@@ -50,6 +52,8 @@ namespace EStore.Components.Dialogs
 
         private void AddItemToOrder()
         {
+            _errorMessageProductNotAdded = null;
+
             var product = _products.FirstOrDefault(p => p.Id == _selectedProductId);
             if (product != null)
             {
@@ -67,6 +71,11 @@ namespace EStore.Components.Dialogs
 
         private async Task HandleSave()
         {
+            if (_createdOrder.Items == null || _createdOrder.Items.Count == 0)
+            {
+                _errorMessageProductNotAdded = "Det måste finnas minst en produkt i ordern.";
+                return;
+            }
             await OnSave.InvokeAsync(_createdOrder);
         }
 
