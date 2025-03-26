@@ -16,6 +16,8 @@ namespace EStore.Components.Dialogs
         public EventCallback OnCancel { get; set; }
 
         private OrderForCreationDto _createdOrder;
+        private string _errorMessageProductNotAdded;
+        private string _errorMessageProductNotChosen;
 
         [Parameter]
         public bool IsVisible { get; set; }
@@ -36,21 +38,22 @@ namespace EStore.Components.Dialogs
 
         private string GetModalClass() => IsVisible ? "show d-block" : "fade";
 
-        protected override async void OnParametersSet()
+        protected override async Task OnInitializedAsync()
         {
             _createdOrder = new OrderForCreationDto
             {
-                Items = new List<OrderItemForCreationDto>(), // Initiera Items-listan för ordern
-                OrderDate = DateTime.Now // Sätt OrderDate till nuvarande datum och tid
+                Items = new List<OrderItemForCreationDto>(),
+                OrderDate = DateTime.Now 
             }; 
             _products = await ProductService.GetProductsAsync();
-            // Filtrera bort utgångna produkter
             _products = _products.Where(p => !p.IsDiscontinued).ToList();
             _customers = await CustomerService.GetCustomersAsync();
         }
 
         private void AddItemToOrder()
         {
+            _errorMessageProductNotAdded = null;
+
             var product = _products.FirstOrDefault(p => p.Id == _selectedProductId);
             if (product != null)
             {
@@ -68,6 +71,11 @@ namespace EStore.Components.Dialogs
 
         private async Task HandleSave()
         {
+            if (_createdOrder.Items == null || _createdOrder.Items.Count == 0)
+            {
+                _errorMessageProductNotAdded = "Det måste finnas minst en produkt i ordern.";
+                return;
+            }
             await OnSave.InvokeAsync(_createdOrder);
         }
 

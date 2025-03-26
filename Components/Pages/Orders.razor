@@ -8,6 +8,7 @@
 <div class="mb-3">
 	<input type="text" class="form-control" placeholder="Sök order via kundens epost" @bind="_searchQuery" />
 	<button class="btn btn-primary mt-2" @onclick="SearchOrderByCustomerEmail">Sök</button>
+	<button class="btn btn-secondary mt-2 ms-2" @onclick="ClearSearch">Rensa</button>
 </div>
 
 <button class="btn btn-success" @onclick="() => PrepareCreate()">Skapa order</button>
@@ -26,11 +27,11 @@ else if (_orders.Any())
 		<thead>
 			<tr>
 				<th>OrderId</th>
-				<th>Customer</th>
-				<th>Customer Email</th>
-				<th>OrderDate</th>
-				<th>Total Amount</th>
-				<th>Details</th>
+				<th>Kund</th>
+				<th>Kundens epost</th>
+				<th>Orderdatum</th>
+				<th>Totalt belopp</th>
+				<th>Produktdetaljer</th>
 			</tr>
 		</thead>
 		<tbody>

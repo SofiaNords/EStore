@@ -31,6 +31,11 @@ namespace EStore.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            await LoadOrdersAsync();
+        }
+
+        private async Task LoadOrdersAsync() 
+        {
             try
             {
                 _orders = await OrderService.GetOrdersAsync();
@@ -60,25 +65,24 @@ namespace EStore.Components.Pages
 
         private async Task SearchOrderByCustomerEmail()
         {
+            _errorMessage = null;
+
             _isLoading = true;
             try
             {
-                // Hämta alla kunder
                 var customers = await CustomerService.GetCustomersAsync();
 
-                // Hitta alla kunder vars e-postadress innehåller den angivna söksträngen
                 var matchingCustomers = customers.Where(c => c.Email.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 if (matchingCustomers.Any())
                 {
-                    // Hämta alla ordrar och filtrera de som är kopplade till de här kunderna
                     _orders = (await OrderService.GetOrdersAsync())
                                 .Where(order => matchingCustomers.Any(c => c.Id == order.CustomerId))
                                 .ToList();
                 }
                 else
                 {
-                    _orders.Clear();  // Om ingen kund matchar, töm listan
+                    _orders.Clear(); 
                     _errorMessage = "Ingen kund hittades med den e-postadressen.";
                 }
             }
@@ -92,8 +96,6 @@ namespace EStore.Components.Pages
             }
         }
 
-
-
         private void ShowDetails(OrderDto details)
         {
             _currentDetails = details;
@@ -105,9 +107,19 @@ namespace EStore.Components.Pages
             _isDetailModalVisible = false;
         }
 
-        private void PrepareCreate()
+        private async Task ClearSearch()
+        {
+            _searchQuery = string.Empty;
+            _errorMessage = null;
+            _isLoading = true;
+
+            await LoadOrdersAsync();
+        }
+
+        private async Task PrepareCreate()
         {
             _orderForCreation = new OrderForCreationDto();
+
             _isCreationModalVisible = true;
         }
 
