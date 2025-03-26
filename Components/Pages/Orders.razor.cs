@@ -116,9 +116,10 @@ namespace EStore.Components.Pages
             await LoadOrdersAsync();
         }
 
-        private void PrepareCreate()
+        private async Task PrepareCreate()
         {
             _orderForCreation = new OrderForCreationDto();
+
             _isCreationModalVisible = true;
         }
 
